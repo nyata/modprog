@@ -17,9 +17,13 @@ enum class SqrtMethod {
 
 class Sqrt {
 public:
+  Sqrt(){}
+
   Sqrt(SqrtMethod m, double e, int n) :
     method(m), estimate(e), iterations(n){
   }
+
+  friend std::ostream& operator<<(std::ostream& os, const Sqrt& s);
 
   // set initial value
   void set_estimate(double e) {
@@ -36,23 +40,28 @@ public:
     this->method = m;
   }
 
+  // set value
+  void set_value(double x) {
+    this->calc_value = calculator(x);
+  }
+
   // get initial value
-  double get_estimate() {
+  double get_estimate() const {
     return this->estimate;
   }
 
   // get iterations value
-  int get_iterations() {
+  int get_iterations() const {
     return this->iterations;
   }
 
   // get calculate method
-  SqrtMethod get_method() {
+  SqrtMethod get_method() const {
     return this->method;
   }
   
   // get calculate method name
-  std::string get_method_name() {
+  std::string get_method_name() const {
     switch(this->method) {
       case SqrtMethod::CPP:
         return "C++";
@@ -66,7 +75,15 @@ public:
         return "C++";
     }
   }
-  
+
+  double get_value() const {
+    return this->calc_value;
+  }
+
+  double get_result() const {
+    return this->result_value;
+  }
+
   double calculator(double x) {
     switch(this->method) {
       case SqrtMethod::CPP:
@@ -86,6 +103,8 @@ private:
   SqrtMethod method;
   double estimate;
   int iterations;
+  double calc_value;
+  double result_value;
 
   // babylonian method
   // calculate approximate solution sqrt(x)
@@ -124,6 +143,12 @@ private:
   }
 };
 
+// overload operator <<
+std::ostream& operator<<(std::ostream& os, const Sqrt& s) {
+  os << s.get_value();
+  return os;
+}
+
 }  // namespace excercise
 
 int main(int argc, char *argv[]) {
@@ -153,8 +178,9 @@ int main(int argc, char *argv[]) {
       case 'c':
         std::cout << "Please enter x: ";
         std::cin >> x;
+        calc.set_value(x);
         std::cout << "Computed square root of x: ";
-        std::cout << calc.calculator(x);
+        std::cout << calc;
         break;
       case 'p':
         std::cout << "Currently selected method: ";
