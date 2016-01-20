@@ -18,9 +18,23 @@ void print(tuple<int, int, int> triple) {
   }
 }
 
-class PrintTuple {
+class PrintPythagorean {
 public:
+  PrintPythagorean(ostream& o) : os(o) {}
+  ostream& operator()(tuple<int, int, int> triple) {
+    int a = get<0>(triple);
+    int b = get<1>(triple);
+    int c = get<2>(triple);
+
+    if (a * a + b * b == c * c) {
+      os << a
+         << ", " << b
+         << ", " << c << endl;
+    }
+    return os;
+  }
 private:
+  ostream& os;
 };
 }  // namespace exercise
 
@@ -34,10 +48,17 @@ int main() {
       }
     }
   }
+
   // passing a function
+  cout << "Passing a function" << endl;
   for_each(tlist.begin(), tlist.end(), exercise::print);
+  
   // passing a function object
+  cout << "Passing a function object" << endl;
+  for_each(tlist.begin(), tlist.end(), exercise::PrintPythagorean(cout));
+
   // using a lambda expression
+  cout << "Using a lambda expression" << endl;
   for_each(tlist.begin(), tlist.end(),
            [] (tuple<int, int, int> triple) {
               int a = get<0>(triple);
