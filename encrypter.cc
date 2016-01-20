@@ -14,7 +14,7 @@ public:
   Encrypt() {}
 
 	Encrypt(unsigned int initialize) {
-		srand48(initialize);
+		srand48(initialize^0x11223344);
 	}
 
   bool encrypt_file(std::string in_name, std::string out_name) {
