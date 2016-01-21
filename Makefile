@@ -12,9 +12,9 @@ CCSRC = glass.cc glasstst.cc
 CCOBJ := $(patsubst %.cc,%.o,$(CCSRC))
 CCDEP := $(patsubst %.cc,%.dep,$(CCSRC))
 
-all: glasstst
+all: glass
 
-glasstst: $(CCOBJ)
+glass: $(CCOBJ)
 	$(CXX) $(INC) $(CCOBJ) -o $@
 
 %.o: %.cc
