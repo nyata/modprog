@@ -16,21 +16,12 @@ list<int> Bubblesort(list<int> list) {
   for (auto i = list.begin(); i != list.end(); i++) {
     for (auto j = list.begin(); j != i; j++) {
       if (*i < *j) {
-        //cout << *i << ", " << *j << endl;
         iter_swap(i, j);
-        //cout << *i << ", " << *j << endl;
-        //cout << "---" << endl;
-        /*
-        auto tmp = j;
-        *j = *(j++);
-        *(j++) = *tmp;
-        */
+        /*auto tmp = i;
+        i = j;
+        j = tmp;*/
       }
     }
-    for (int l : list) {
-      cout << l << ",";
-    }
-    cout << endl;
   }
 /*  cout << "start" << endl;
   int list_size = list.size();

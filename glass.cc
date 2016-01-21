@@ -1,47 +1,75 @@
 /*
  * modern programming excercise12
  * 17/12/2015 Nagisa YATA
+ * 21/01/2016 modified for exercise24
  */
 
 #include <iostream>
+#include "glass.h"
 
 namespace exercise {
+/*
+ * Exception class
+ */
+GlassException::GlassException(ExceptionType t) : type(t) {}
+GlassException::GlassException(ExceptionType t, std::string w)
+  : type(t), where(w) {}
 
-class Glass {
-public:
-  Glass(){}
+std::string GlassException::what() {
+  std::string message = "Error in class glass: ";
+  switch (type) {
+    case ExceptionType::OVERFLOW:
+      message += "overflow from container";
+      break;
+    case ExceptionType::UNDERFLOW:
+      message += "underflow from container";
+      break;
+    case ExceptionType::INVALID:
+      message += "invalid value";
+      break;
+    default:
+      message += "unknown error";
+  }
+  if (!where.empty()) {
+    message += (" in " + where);
+  }
 
-  Glass(unsigned int v = 100, unsigned int n = 0) {
+  return message + ".";
+}
+
+/*
+ * Glass class
+ */
+Glass::Glass(unsigned int v, unsigned int n) {
+  if (v <= 0) {
+    volume = 100;
+    throw GlassException(GlassException::ExceptionType::INVALID, "45");
+  } else {
     volume = v;
-    fillIn(n);
   }
+  fillIn(n);
+}
 
-  void fillIn(unsigned int fi) {
-    if(fi + content > volume) {
-      content = volume;
-    } else {
-      content += fi;
-    }
+void Glass::fillIn(unsigned int fi) {
+  if(fi + content > volume) {
+    content = volume;
+    throw GlassException(GlassException::ExceptionType::OVERFLOW, "55");
+  } else {
+    content += fi;
   }
+}
 
-  unsigned int drink(unsigned int dr) {
-    unsigned int drunk = dr;
-    if(content < dr) {
-      content = 0;
-      drunk = content;
-    } else {
-      content -= dr;
-    }
-    return drunk;
+unsigned int Glass::drink(unsigned int dr) {
+  unsigned int drunk = dr;
+  if(content < dr) {
+    content = 0;
+    drunk = content;
+    throw GlassException(GlassException::ExceptionType::UNDERFLOW, "66");
+  } else {
+    content -= dr;
   }
-
-  friend std::ostream& operator<<(std::ostream& os, const Glass& g);
-  friend std::istream& operator>>(std::istream& is, Glass& g);
-
-private:
-  unsigned int volume;
-  unsigned int content;
-};
+  return drunk;
+}
 
 // overload operator <<
 std::ostream& operator<<(std::ostream& os, const Glass& g) {
@@ -57,31 +85,3 @@ std::istream& operator>>(std::istream& is, Glass& g) {
 }
 
 }  // namespace exercise
-
-int main(int argc, char *argv[]) {
-  // test for constructor and <<
-  exercise::Glass gl(300, 200);
-  std::cout << gl;
-  
-  // test for fillIN
-  gl.fillIn(50);
-  std::cout << gl;
-  
-  // test for drink
-  unsigned int drunk = gl.drink(200);
-  std::cout << drunk << std::endl;
-  
-  // test for empty
-  drunk = gl.drink(100);
-  std::cout << drunk << std::endl;
-  
-  // test for overflow
-  gl.fillIn(350);
-  std::cout << gl;
-
-  // test for >>
-  std::cout << "Input volume: ";
-  std::cin >> gl;
-  std::cout << gl;
-  return 0;
-}

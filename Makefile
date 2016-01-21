@@ -1,19 +1,29 @@
-# Makefile
-# for compilie prog1 and prog2
-# 4/12/2015 Nagisa YATA
+## Makefile
+## author:  Holger Arndt
+## version: 26.07.2012
 
-CPP = g++
-C = gcc
-CFLAGS = -Wall
-CPPOPT = -std=c++11 -pedantic
+CPP = cpp
+MAKEDEP = $(CPP) -MM
+CXX = g++-4.7
+CXXFLAGS = -Wall -std=c++11
+#-fexceptions
 
-all: prog1 prog2 date square
+CCSRC = glass.cc glasstst.cc
+CCOBJ := $(patsubst %.cc,%.o,$(CCSRC))
+CCDEP := $(patsubst %.cc,%.dep,$(CCSRC))
 
-%: %.c
-	#$(C) $(CFLAGS) $< -o $@-gcc.o
-	$(CXX) $(CPPOPT) $(CFLAGS) $< -o $@-g++.o
+all: glasstst
 
-.PHONY: clean
+glasstst: $(CCOBJ)
+	$(CXX) $(INC) $(CCOBJ) -o $@
+
+%.o: %.cc
+	$(CXX) $(INC) $(CXXFLAGS) -c $<
+
+%.dep: %.cc
+	$(MAKEDEP) $< | sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' > $@
 
 clean:
-	rm -f prog*.o
+	rm -f $(CCOBJ) $(CCDEP) glasstst
+
+-include $(CCDEP)
