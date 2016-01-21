@@ -1,3 +1,9 @@
+/*
+ * exercise 22
+ * STL
+ * 20/01/2016 Nagisa YATA
+ */
+
 #include <algorithm>
 #include <iostream>
 #include <list>
