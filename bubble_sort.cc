@@ -12,7 +12,8 @@
 using namespace std;
 
 namespace exercise {
-list<int> Bubblesort(list<int> list) {
+template<class T>
+list<T> Bubblesort(list<T> list) {
   for (auto i = list.begin(); i != list.end(); i++) {
     for (auto j = list.begin(); j != i; j++) {
       if (*i < *j) {
@@ -55,6 +56,9 @@ list<int> Bubblesort(list<int> list) {
 
 int main() {
   srand(static_cast<unsigned int>(time(NULL)));
+  
+  // int
+  cout << "----- int -----" << endl;
   list<int> elements;
   int elem_num = 10;
   for (int i = 0; i < elem_num; i++) {
@@ -63,9 +67,24 @@ int main() {
   for(const auto& elem : elements) {
     cout << elem << endl;
   }
-  list<int> result = exercise::Bubblesort(elements);
+  list<int> result = exercise::Bubblesort<int>(elements);
   cout << "----- bubble sort -----" << endl;
   for(const auto& elem : result) {
+    cout << elem << endl;
+  }
+  
+  // double
+  cout << "----- double -----" <<endl;
+  list<double> elements2;
+  for (int i = 0; i < elem_num; i++) {
+    elements2.push_back(rand());
+  }
+  for(const auto& elem : elements2) {
+    cout << elem << endl;
+  }
+  list<double> result2 = exercise::Bubblesort<double>(elements2);
+  cout << "----- bubble sort -----" << endl;
+  for(const auto& elem : result2) {
     cout << elem << endl;
   }
 }
